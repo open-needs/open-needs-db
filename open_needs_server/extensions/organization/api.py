@@ -51,9 +51,9 @@ async def create_organization(
     ext: ONSExtension, db: AsyncSession, organization: OrganizationCreateSchema
 ):
     organization = ext.fire_event("org_create", organization)
-    cursor = await db.execute(insert(OrganizationModel), organization)
+    cursor = await db.execute(insert(OrganizationModel).values(**organization).returning(OrganizationModel.id))
     await db.commit()
-    organization_id = cursor.inserted_primary_key[0]
+    organization_id = cursor.fetchone()[0]
     new_organization = {**organization, "id": organization_id}
     new_organization = ext.fire_event("org_create_done", new_organization)
     return new_organization
