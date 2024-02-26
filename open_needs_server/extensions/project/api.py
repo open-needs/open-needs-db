@@ -37,9 +37,14 @@ async def create_project(db: AsyncSession, project: ProjectSchema):
             raise HTTPException(404, detail=f"Unknown domain id: {domain_id}")
         domains_db.append(domain_db)
 
-    cursor = await db.execute(insert(ProjectModel), project)
+
+    project = {
+        "title": project["title"],
+        "organization_id": project["organization_id"]
+    }
+    cursor = await db.execute(insert(ProjectModel).values(**project).returning(ProjectModel.id))
     await db.commit()
-    project_id = cursor.inserted_primary_key[0]
+    project_id = cursor.fetchone()[0]
     project_db = await get_project(db, project_id)
     project_db.domains = domains_db
     await db.commit()
