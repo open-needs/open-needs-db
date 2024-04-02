@@ -1,6 +1,6 @@
 import importlib
 import logging
-from sqladmin import Admin, ModelAdmin
+from sqladmin import Admin, ModelView
 
 from open_needs_server.extensions.base import ONSExtension
 from open_needs_server.database import engine
@@ -24,7 +24,7 @@ class OnsAdminExtension(ONSExtension):
         self.admin = Admin(self.ons_app, engine)
 
         for admin_model in self._get_models():
-            self.admin.register_model(admin_model)
+            self.admin.add_view(admin_model)
 
     def _get_models(self):
         models = []
@@ -49,7 +49,7 @@ class OnsAdminExtension(ONSExtension):
 
             new_class = types.new_class(
                 name=f"{class_str}Admin",
-                bases=(ModelAdmin,),
+                bases=(ModelView,),
                 kwds={"model": clazz},
                 exec_body=lambda ns: ns.update(
                     {

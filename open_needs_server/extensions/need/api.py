@@ -35,9 +35,9 @@ async def create_need(ext: ONSExtension, db: AsyncSession, need: NeedReturnSchem
     data = ext.fire_event("need_create", {"need": need, "project": db_project})
     need = data["need"]
 
-    cursor = await db.execute(insert(NeedModel), need)
+    cursor = await db.execute(insert(NeedModel).values(**need).returning(NeedModel.id))
     await db.commit()
-    need_id = cursor.inserted_primary_key[0]
+    need_id = cursor.fetchone()[0]
 
     need = ext.fire_event("need_create_done", need)
 
