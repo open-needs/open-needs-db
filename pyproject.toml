@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "open_needs_server"
+version = "0.1.0"
+authors = [
+  { name="Open-Needs community", email="daniel@useblocks.com" },
+]
+description = "Open-Needs Server"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies", "optional-dependencies"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["open_needs_server"]
+namespaces = false
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements/server.txt"]}
+optional-dependencies.docs = {file = ["requirements/docs.txt"] }
+optional-dependencies.data = {file = ["requirements/data.txt"] }
+
+
+[project.scripts]
+ons = "open_needs_server.main:start"
