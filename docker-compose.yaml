@@ -1,0 +1,45 @@
+
+volumes:
+  pip-dir:
+
+services:
+  build:
+    image: python:3.10-buster
+    volumes:
+      - pip-dir:/pip_dir
+      - .:/open-needs-server
+    working_dir: /open-needs-server
+    healthcheck:
+      test: test -f /pip_dir/bin/ons || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 6
+    environment:
+      PYTHONUSERBASE: /pip_dir
+    command:
+      - /bin/bash
+      - -c
+      - |
+        python3 -m pip install --user . --upgrade
+        while true;
+          do sleep 30
+        done
+  backend:
+    image: python:3.10-buster
+    ports:
+     - 9595:9595
+    network_mode: "host"
+    networks: []
+    configs: []
+    volumes:
+      - pip-dir:/pip_dir
+      - .:/open-needs-server  # still need the settings.toml file at runtime
+    working_dir: /open-needs-server
+    depends_on:
+      build:
+        condition: service_healthy
+    environment:
+      PYTHONPATH: /pip_dir/lib/python3.10/site-packages:$PYTHONPATH
+      PATH: /pip_dir/bin:$PATH
+    command: ons
+    
