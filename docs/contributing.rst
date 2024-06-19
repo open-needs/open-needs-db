@@ -11,6 +11,6 @@ Documentation build
 
 .. code-block:: bash
 
-   pip install -r requirements/docs.txt
+   python3 -m pip install .[docs]
    cd docs
    make html

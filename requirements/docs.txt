@@ -1,9 +1,9 @@
-sphinx
+sphinx>=5.0.0
 jinja2<3.1
 sphinx-immaterial           # The theme
 sphinxcontrib-plantuml      # Used for all architecture and mockup images
 sphinxcontrib-httpdomain    # Used REST-API documentation
-sphinxcontrib-needs         # need objects and filtering
+sphinxcontrib-needs>=0.7.9  # need objects and filtering
 sphinx-panels               # tabs, dropdonws, cards and more
 sphinx-disqus               # comment field integration
 sphinx-preview              # iframe-preview for links

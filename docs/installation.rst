@@ -18,8 +18,5 @@ From source
 
    git clone git@github.com:open-needs/open-needs-server.git
    cd open-needs-server
-   pip install -e .
+   python3 -m pip install .
    ons
-
-
-
